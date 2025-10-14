@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math Practice — Simultaneous & Quadratic Equations</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <div class="max-w-3xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-lg">
+    <h1 class="text-3xl font-bold text-center mb-6 text-blue-700">
+      🧮 Math Practice App
+    </h1>
+
+    <!-- Setup Area -->
+    <section id="setup" class="space-y-4">
+      <div>
+        <label class="font-semibold">Select Topic:</label>
+        <select id="topicFilter" class="border p-2 rounded w-full">
+          <option value="all">All Topics</option>
+          <option value="simultaneous2">Simultaneous (2 Unknowns)</option>
+          <option value="simultaneous3">Simultaneous (3 Unknowns)</option>
+          <option value="quadratic">Quadratic Equations</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="font-semibold">Number of Questions:</label>
+          <input id="numQuestions" type="number" value="5" min="1" class="border p-2 rounded w-full">
+        </div>
+        <div>
+          <label class="font-semibold">Quiz Duration (sec):</label>
+          <input id="quizDuration" type="number" value="300" min="60" class="border p-2 rounded w-full">
+        </div>
+      </div>
+
+      <button id="startBtn"
+        class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition">
+        ▶ Start Quiz
+      </button>
+    </section>
+
+    <!-- Quiz Area -->
+    <section id="quizArea" class="hidden mt-8 space-y-4">
+      <div class="flex justify-between items-center bg-blue-50 p-3 rounded-lg">
+        <div>Question <span id="curIndex">1</span>/<span id="totalQuestions">--</span></div>
+        <div>⏱ Time Left: <span id="timeLeft">--:--</span></div>
+      </div>
+
+      <div id="questionText" class="text-lg font-medium p-3"></div>
+      <div id="options" class="space-y-3"></div>
+
+      <div class="flex justify-between mt-4">
+        <button id="prevBtn" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">⬅ Prev</button>
+        <button id="nextBtn" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">Next ➡</button>
+      </div>
+
+      <div class="text-sm text-gray-600 mt-2">Elapsed on this question: <span id="qElapsed">0s</span></div>
+
+      <button id="submitBtn" class="w-full mt-4 bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700">
+        ✅ Submit Quiz
+      </button>
+    </section>
+
+    <!-- Results Area -->
+    <section id="resultArea" class="hidden mt-8 space-y-4">
+      <h2 class="text-2xl font-bold text-green-700">📊 Results</h2>
+      <div id="summaryBox" class="bg-green-50 p-4 rounded-lg"></div>
+      <div id="details" class="space-y-3"></div>
+
+      <div class="flex gap-3">
+        <button id="downloadCsv" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">⬇ Download CSV</button>
+        <button id="restartBtn" class="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600">🔁 Restart</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
