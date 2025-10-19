@@ -6,8 +6,9 @@
   <title>🎓 Math & Physics Practice App</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    // Use only \( \) as inline delimiter — no $ signs
     window.MathJax = {
-      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      tex: { inlineMath: [['\\(', '\\)']] },
       svg: { fontCache: 'global' }
     };
   </script>
