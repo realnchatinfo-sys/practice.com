@@ -3,32 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Math Practice — Simultaneous & Quadratic Equations</title>
+  <title>🎓 Math & Physics Practice App</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     window.MathJax = {
-      tex: { inlineMath: [['\\(', '\\)']] },
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
       svg: { fontCache: 'global' }
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
 </head>
 <body class="bg-gray-50 text-gray-800">
-  <div class="max-w-3xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-lg">
+  <div class="max-w-4xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-lg">
     <h1 class="text-3xl font-bold text-center mb-6 text-blue-700">
-      🧮 Math Practice App
+      🎓 Math & Physics Practice App
     </h1>
 
     <!-- Setup Area -->
     <section id="setup" class="space-y-4">
-      <div>
-        <label class="font-semibold">Select Topic:</label>
-        <select id="topicFilter" class="border p-2 rounded w-full">
-          <option value="all">All Topics</option>
-          <option value="simultaneous2">Simultaneous (2 Unknowns)</option>
-          <option value="simultaneous3">Simultaneous (3 Unknowns)</option>
-          <option value="quadratic">Quadratic Equations</option>
-        </select>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="font-semibold block mb-1">Select Subject:</label>
+          <select id="subjectSelect" class="border p-2 rounded w-full">
+            <option value="all">All Subjects</option>
+            <option value="mathematics">Mathematics</option>
+            <option value="physics">Physics</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="font-semibold block mb-1">Select Topic:</label>
+          <select id="topicFilter" class="border p-2 rounded w-full">
+            <option value="all">All Topics</option>
+            <!-- topics will be populated dynamically -->
+          </select>
+        </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
@@ -38,7 +47,7 @@
         </div>
         <div>
           <label class="font-semibold">Quiz Duration (sec):</label>
-          <input id="quizDuration" type="number" value="300" min="60" class="border p-2 rounded w-full">
+          <input id="quizDuration" type="number" value="300" min="30" class="border p-2 rounded w-full">
         </div>
       </div>
 
