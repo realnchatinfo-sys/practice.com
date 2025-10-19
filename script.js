@@ -1,15 +1,8 @@
 /* script.js
 -----------------------------------------------------
-Main logic for the Math Practice App.
-Relies on QUESTIONS (from data.js) and MathJax for LaTeX rendering.
-
-Features:
-- Random sampling / topic filtering of questions
-- Whole-quiz countdown timer
-- Per-question elapsed time tracking
-- Multiple-choice selection with live highlighting
-- Step-by-step worked solutions (LaTeX)
-- Summary report & CSV export
+Upgraded to support Subject -> Topic filtering.
+Keeps original functionality: whole timer, per-question timer,
+MathJax rendering, CSV download, solution steps.
 ----------------------------------------------------- */
 
 (function() {
@@ -17,6 +10,7 @@ Features:
   const startBtn = document.getElementById('startBtn');
   const numQuestionsSel = document.getElementById('numQuestions');
   const topicFilter = document.getElementById('topicFilter');
+  const subjectSelect = document.getElementById('subjectSelect');
   const quizDuration = document.getElementById('quizDuration');
 
   const quizArea = document.getElementById('quizArea');
@@ -55,22 +49,88 @@ Features:
     return `${mm}:${ss}`;
   }
 
+  // === TOPIC / SUBJECT POPULATION ===
+  function getUniqueTopics(subject) {
+    const set = new Set();
+    QUESTIONS.forEach(q => {
+      if (subject === 'all' || q.subject === subject) set.add(q.topic);
+    });
+    return Array.from(set).sort();
+  }
+
+  function prettyTopicName(topic) {
+    // map machine topic keys to readable names (you can extend this)
+    const map = {
+      simultaneous2: 'Simultaneous (2 Unknowns)',
+      simultaneous3: 'Simultaneous (3 Unknowns)',
+      quadratic: 'Quadratic Equations',
+      waves: 'Waves',
+      heat: 'Heat Energy'
+    };
+    return map[topic] || topic;
+  }
+
+  function populateTopics() {
+    const subject = subjectSelect.value;
+    const topics = getUniqueTopics(subject);
+    topicFilter.innerHTML = '';
+    const allOpt = document.createElement('option');
+    allOpt.value = 'all';
+    allOpt.textContent = 'All Topics';
+    topicFilter.appendChild(allOpt);
+
+    topics.forEach(t => {
+      const o = document.createElement('option');
+      o.value = t;
+      o.textContent = prettyTopicName(t);
+      topicFilter.appendChild(o);
+    });
+  }
+
+  // initialize topics on load (data.js already loaded)
+  populateTopics();
+
+  // update topics when subject changes
+  subjectSelect.addEventListener('change', () => {
+    populateTopics();
+  });
+
   // === SELECT QUESTIONS ===
   function pickQuestions() {
-    const n = parseInt(numQuestionsSel.value, 10);
+    const n = Math.max(1, parseInt(numQuestionsSel.value, 10) || 1);
+    const subject = subjectSelect.value;
     const topic = topicFilter.value;
-    pool = (topic === 'all') ? QUESTIONS.slice() : QUESTIONS.filter(q => q.topic === topic);
-    // Shuffle
+
+    pool = QUESTIONS.slice();
+
+    if (subject !== 'all') {
+      pool = pool.filter(q => q.subject === subject);
+    }
+
+    if (topic !== 'all') {
+      pool = pool.filter(q => q.topic === topic);
+    }
+
+    // Shuffle pool (Fisher-Yates)
     for (let i = pool.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [pool[i], pool[j]] = [pool[j], pool[i]];
     }
+
     quiz = pool.slice(0, n);
     totalQuestionsEl.textContent = quiz.length;
   }
 
   // === DISPLAY QUESTION ===
   function showQuestion(idx) {
+    if (!quiz.length) {
+      questionText.innerHTML = "<em>No questions available for selected Subject/Topic. Please adjust filters.</em>";
+      optionsBox.innerHTML = '';
+      curIndexEl.textContent = 0;
+      totalQuestionsEl.textContent = 0;
+      return;
+    }
+
     if (idx < 0) idx = 0;
     if (idx >= quiz.length) idx = quiz.length - 1;
     current = idx;
@@ -127,14 +187,16 @@ Features:
       perQTime[qid] = (perQTime[qid] || 0) + elapsed;
     }
     selections[qid] = idx;
+    // keep the user on the same question but re-render (to highlight)
     showQuestion(current);
   }
 
   // === WHOLE QUIZ TIMER ===
   function startWholeTimer() {
-    wholeRemaining = parseInt(quizDuration.value, 10);
+    wholeRemaining = Math.max(1, parseInt(quizDuration.value, 10) || 60);
     quizStartTs = Date.now();
     timeLeftEl.textContent = formatTime(wholeRemaining);
+    if (wholeTimer) clearInterval(wholeTimer);
     wholeTimer = setInterval(() => {
       wholeRemaining -= 1;
       timeLeftEl.textContent = formatTime(wholeRemaining);
@@ -148,7 +210,7 @@ Features:
   // === FINISH QUIZ ===
   function finishQuiz(reason) {
     // Save last question time
-    if (qStartTs) {
+    if (qStartTs && quiz[current]) {
       const now = performance.now();
       const elapsed = (now - qStartTs) / 1000;
       const qid = quiz[current].id;
@@ -166,7 +228,9 @@ Features:
         correct: q.correct,
         isCorrect: selected === q.correct,
         time: perQTime[q.id] || 0,
-        solutionSteps: q.solutionSteps || []
+        solutionSteps: q.solutionSteps || [],
+        subject: q.subject,
+        topic: q.topic
       };
     });
 
@@ -203,7 +267,7 @@ Features:
       const card = document.createElement('div');
       card.className = 'border rounded p-4 bg-white';
       card.innerHTML = `
-        <div class="mb-2"><strong>Q${idx + 1}:</strong> \\(${r.question}\\)</div>
+        <div class="mb-2"><strong>Q${idx + 1} (${r.subject} — ${prettyTopicName(r.topic)}):</strong> \\(${r.question}\\)</div>
         <div class="mb-1">Your answer: <strong>${r.selected === null ? '---' : String.fromCharCode(65 + r.selected)}</strong> 
           &nbsp; | &nbsp; Correct: <strong>${String.fromCharCode(65 + r.correct)}</strong>
         </div>
@@ -226,16 +290,18 @@ Features:
 
   // === DOWNLOAD RESULTS (CSV) ===
   function downloadCSV() {
-    const rows = [['#', 'Question', 'Selected', 'Correct', 'IsCorrect', 'Time(s)']];
+    const rows = [['#', 'Subject','Topic', 'Question', 'Selected', 'Correct', 'IsCorrect', 'Time(s)']];
     quiz.forEach((q, i) => {
       const sel = selections[q.id];
       const isCorrect = sel === q.correct;
       rows.push([
         i + 1,
+        q.subject,
+        q.topic,
         q.question.replace(/\n/g, ' '),
         sel === undefined ? '' : String.fromCharCode(65 + sel),
         String.fromCharCode(65 + q.correct),
-        isCorrect,
+        isCorrect ? '1' : '0',
         (perQTime[q.id] || 0).toFixed(2)
       ]);
     });
@@ -256,6 +322,10 @@ Features:
     perQTime = {};
     current = 0;
     resultArea.classList.add('hidden');
+    if (!quiz.length) {
+      alert('No questions match the selected Subject/Topic. Please change your selection.');
+      return;
+    }
     quizArea.classList.remove('hidden');
     showQuestion(0);
     if (wholeTimer) clearInterval(wholeTimer);
@@ -287,12 +357,24 @@ Features:
 
   // === HELPER: SAVE CURRENT QUESTION TIME ===
   function saveTimeCurrent() {
-    if (!qStartTs) return;
+    if (!qStartTs || !quiz[current]) return;
     const now = performance.now();
     const elapsed = (now - qStartTs) / 1000;
     const qid = quiz[current].id;
     perQTime[qid] = (perQTime[qid] || 0) + elapsed;
     qStartTs = performance.now(); // reset for next question
+  }
+
+  // Utility used in renderResults (redeclared here to keep local)
+  function prettyTopicName(topic) {
+    const map = {
+      simultaneous2: 'Simultaneous (2 Unknowns)',
+      simultaneous3: 'Simultaneous (3 Unknowns)',
+      quadratic: 'Quadratic Equations',
+      waves: 'Waves',
+      heat: 'Heat Energy'
+    };
+    return map[topic] || topic;
   }
 
 })();
