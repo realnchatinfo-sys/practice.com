@@ -6,7 +6,7 @@
   <title>🎓 Math & Physics Practice App</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Use only \( \) as inline delimiter — no $ signs
+    // Only use \( ... \) for inline math — no $ signs.
     window.MathJax = {
       tex: { inlineMath: [['\\(', '\\)']] },
       svg: { fontCache: 'global' }
@@ -36,7 +36,6 @@
           <label class="font-semibold block mb-1">Select Topic:</label>
           <select id="topicFilter" class="border p-2 rounded w-full">
             <option value="all">All Topics</option>
-            <!-- topics will be populated dynamically -->
           </select>
         </div>
       </div>
@@ -65,7 +64,7 @@
         <div>⏱ Time Left: <span id="timeLeft">--:--</span></div>
       </div>
 
-      <div id="questionText" class="text-lg font-medium p-3"></div>
+      <div id="questionText" class="text-lg font-medium p-3 leading-relaxed"></div>
       <div id="options" class="space-y-3"></div>
 
       <div class="flex justify-between mt-4">
@@ -83,7 +82,7 @@
     <!-- Results Area -->
     <section id="resultArea" class="hidden mt-8 space-y-4">
       <h2 class="text-2xl font-bold text-green-700">📊 Results</h2>
-      <div id="summaryBox" class="bg-green-50 p-4 rounded-lg"></div>
+      <div id="summaryBox" class="bg-green-50 p-4 rounded-lg leading-relaxed"></div>
       <div id="details" class="space-y-3"></div>
 
       <div class="flex gap-3">
