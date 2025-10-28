@@ -286,6 +286,321 @@ const QUESTIONS = [
       "1. logA - logB = log(A/B).",
       "2. log(50/2) = log(25)."
     ]
-  }
+  },
+  // ==============================
+// QUESTION BANK DATA FILE
+// Subject: Physics (WAEC & JAMB Standard)
+// Batch 2: IDs 26–50
+// Each question includes: id, subject, topic, question, options, correct index, and solutionSteps
+// ==============================
+
+// ---------- PHYSICS: Waves ----------
+{
+  id: 26,
+  subject: 'physics',
+  topic: 'waves',
+  question: "A wave has a frequency of 5 Hz and a wavelength of 0.8 m. Find its velocity.",
+  options: ["4.0 m/s", "5.8 m/s", "6.0 m/s", "3.5 m/s"],
+  correct: 0,
+  solutionSteps: [
+    "1. Wave velocity v = f × λ.",
+    "2. v = 5 × 0.8 = 4.0 m/s."
+  ]
+},
+
+{
+  id: 27,
+  subject: 'physics',
+  topic: 'waves',
+  question: "If the velocity of sound in air is 340 m/s and its frequency is 170 Hz, find its wavelength.",
+  options: ["1.0 m", "2.0 m", "0.5 m", "4.0 m"],
+  correct: 1,
+  solutionSteps: [
+    "1. λ = v / f = 340 / 170 = 2.0 m."
+  ]
+},
+
+{
+  id: 28,
+  subject: 'physics',
+  topic: 'waves',
+  question: "A wave travels a distance of 24 m in 3 seconds. Calculate its speed.",
+  options: ["8 m/s", "12 m/s", "6 m/s", "9 m/s"],
+  correct: 0,
+  solutionSteps: [
+    "1. Speed = Distance / Time.",
+    "2. v = 24 / 3 = 8 m/s."
+  ]
+},
+
+{
+  id: 29,
+  subject: 'physics',
+  topic: 'waves',
+  question: "The time taken for a particle to complete one oscillation is called what?",
+  options: ["Amplitude", "Frequency", "Period", "Phase"],
+  correct: 2,
+  solutionSteps: [
+    "1. Time for one oscillation is the Period (T)."
+  ]
+},
+
+{
+  id: 30,
+  subject: 'physics',
+  topic: 'waves',
+  question: "If a sound wave has a period of 0.01 s, find its frequency.",
+  options: ["100 Hz", "10 Hz", "50 Hz", "200 Hz"],
+  correct: 0,
+  solutionSteps: [
+    "1. f = 1 / T = 1 / 0.01 = 100 Hz."
+  ]
+},
+
+{
+  id: 31,
+  subject: 'physics',
+  topic: 'waves',
+  question: "What type of wave is a sound wave?",
+  options: ["Transverse", "Longitudinal", "Electromagnetic", "Stationary"],
+  correct: 1,
+  solutionSteps: [
+    "1. Sound waves propagate as longitudinal waves."
+  ]
+},
+
+{
+  id: 32,
+  subject: 'physics',
+  topic: 'waves',
+  question: "The maximum displacement of a wave particle from its mean position is called what?",
+  options: ["Amplitude", "Wavelength", "Period", "Frequency"],
+  correct: 0,
+  solutionSteps: [
+    "1. Amplitude is the maximum displacement."
+  ]
+},
+
+{
+  id: 33,
+  subject: 'physics',
+  topic: 'waves',
+  question: "Two waves have frequencies 200 Hz and 180 Hz. The beat frequency produced is?",
+  options: ["20 Hz", "180 Hz", "200 Hz", "10 Hz"],
+  correct: 0,
+  solutionSteps: [
+    "1. Beat frequency = |f₁ - f₂| = |200 - 180| = 20 Hz."
+  ]
+},
+
+{
+  id: 34,
+  subject: 'physics',
+  topic: 'waves',
+  question: "A vibrating tuning fork produces 60 complete oscillations in 2 seconds. Find its frequency.",
+  options: ["20 Hz", "30 Hz", "60 Hz", "120 Hz"],
+  correct: 3,
+  solutionSteps: [
+    "1. f = number of oscillations / time = 60 / 0.5 = 120 Hz."
+  ]
+},
+
+// ---------- PHYSICS: Heat Energy ----------
+{
+  id: 35,
+  subject: 'physics',
+  topic: 'heat',
+  question: "The quantity of heat required to raise the temperature of 1 kg of a substance by 1°C is called what?",
+  options: ["Heat Capacity", "Latent Heat", "Specific Heat Capacity", "Thermal Energy"],
+  correct: 2,
+  solutionSteps: [
+    "1. Specific Heat Capacity = heat per unit mass per degree rise in temperature."
+  ]
+},
+
+{
+  id: 36,
+  subject: 'physics',
+  topic: 'heat',
+  question: "Calculate the heat energy required to raise the temperature of 2 kg of water from 20°C to 50°C. (Specific heat capacity of water = 4200 J/kg°C)",
+  options: ["252,000 J", "126,000 J", "84,000 J", "168,000 J"],
+  correct: 0,
+  solutionSteps: [
+    "1. Q = mcΔT.",
+    "2. Q = 2 × 4200 × (50 - 20) = 2 × 4200 × 30 = 252,000 J."
+  ]
+},
+
+{
+  id: 37,
+  subject: 'physics',
+  topic: 'heat',
+  question: "The heat energy absorbed or released during a change of state without a change in temperature is called what?",
+  options: ["Specific Heat", "Latent Heat", "Thermal Capacity", "Radiation"],
+  correct: 1,
+  solutionSteps: [
+    "1. Change of state involves Latent Heat."
+  ]
+},
+
+{
+  id: 38,
+  subject: 'physics',
+  topic: 'heat',
+  question: "The process of heat transfer that does not require a material medium is called?",
+  options: ["Conduction", "Convection", "Radiation", "Evaporation"],
+  correct: 2,
+  solutionSteps: [
+    "1. Radiation can occur through a vacuum."
+  ]
+},
+
+{
+  id: 39,
+  subject: 'physics',
+  topic: 'heat',
+  question: "Find the quantity of heat absorbed by 0.5 kg of aluminum when its temperature rises by 60°C. (c = 900 J/kg°C)",
+  options: ["27,000 J", "30,000 J", "45,000 J", "25,000 J"],
+  correct: 0,
+  solutionSteps: [
+    "1. Q = mcΔT = 0.5 × 900 × 60 = 27,000 J."
+  ]
+},
+
+{
+  id: 40,
+  subject: 'physics',
+  topic: 'heat',
+  question: "Which of the following is a poor conductor of heat?",
+  options: ["Copper", "Aluminum", "Wood", "Iron"],
+  correct: 2,
+  solutionSteps: [
+    "1. Wood is a thermal insulator."
+  ]
+},
+
+{
+  id: 41,
+  subject: 'physics',
+  topic: 'heat',
+  question: "The specific latent heat of fusion of ice is 3.36 × 10⁵ J/kg. Calculate the heat required to melt 2 kg of ice at 0°C.",
+  options: ["6.72 × 10⁵ J", "3.36 × 10⁵ J", "1.68 × 10⁵ J", "7.00 × 10⁵ J"],
+  correct: 0,
+  solutionSteps: [
+    "1. Q = mL = 2 × 3.36×10⁵ = 6.72×10⁵ J."
+  ]
+},
+
+{
+  id: 42,
+  subject: 'physics',
+  topic: 'heat',
+  question: "Which method of heat transfer is responsible for the rise of smoke from a fire?",
+  options: ["Conduction", "Convection", "Radiation", "Evaporation"],
+  correct: 1,
+  solutionSteps: [
+    "1. Hot air rises due to convection currents."
+  ]
+},
+
+{
+  id: 43,
+  subject: 'physics',
+  topic: 'heat',
+  question: "What type of surface is the best absorber of radiant heat?",
+  options: ["Shiny white surface", "Polished metal surface", "Black rough surface", "Smooth silver surface"],
+  correct: 2,
+  solutionSteps: [
+    "1. Black and rough surfaces absorb radiation best."
+  ]
+},
+
+// ---------- PHYSICS: Motion ----------
+{
+  id: 44,
+  subject: 'physics',
+  topic: 'motion',
+  question: "A car moves with a uniform velocity of 20 m/s for 10 seconds. Find the distance covered.",
+  options: ["200 m", "150 m", "100 m", "250 m"],
+  correct: 0,
+  solutionSteps: [
+    "1. s = v × t = 20 × 10 = 200 m."
+  ]
+},
+
+{
+  id: 45,
+  subject: 'physics',
+  topic: 'motion',
+  question: "A body starts from rest and accelerates uniformly at 4 m/s² for 5 seconds. Find its final velocity.",
+  options: ["10 m/s", "15 m/s", "20 m/s", "25 m/s"],
+  correct: 2,
+  solutionSteps: [
+    "1. v = u + at = 0 + 4 × 5 = 20 m/s."
+  ]
+},
+
+{
+  id: 46,
+  subject: 'physics',
+  topic: 'motion',
+  question: "A stone is dropped from a height of 20 m. Calculate the time taken to reach the ground. (g = 10 m/s²)",
+  options: ["2 s", "3 s", "1 s", "4 s"],
+  correct: 0,
+  solutionSteps: [
+    "1. s = ½gt² → 20 = ½×10×t² → t² = 4 → t = 2 s."
+  ]
+},
+
+{
+  id: 47,
+  subject: 'physics',
+  topic: 'motion',
+  question: "If a car accelerates from 5 m/s to 25 m/s in 4 s, find its acceleration.",
+  options: ["2.5 m/s²", "3.5 m/s²", "5.0 m/s²", "4.0 m/s²"],
+  correct: 2,
+  solutionSteps: [
+    "1. a = (v - u)/t = (25 - 5)/4 = 5 m/s²."
+  ]
+},
+
+{
+  id: 48,
+  subject: 'physics',
+  topic: 'motion',
+  question: "A body moving at 12 m/s comes to rest in 3 seconds. Find its deceleration.",
+  options: ["3 m/s²", "4 m/s²", "5 m/s²", "6 m/s²"],
+  correct: 1,
+  solutionSteps: [
+    "1. a = (v - u)/t = (0 - 12)/3 = -4 m/s² (deceleration = 4 m/s²)."
+  ]
+},
+
+{
+  id: 49,
+  subject: 'physics',
+  topic: 'motion',
+  question: "A train travels 100 m in 5 seconds. Calculate its average speed.",
+  options: ["10 m/s", "15 m/s", "20 m/s", "25 m/s"],
+  correct: 2,
+  solutionSteps: [
+    "1. v = s / t = 100 / 5 = 20 m/s."
+  ]
+},
+
+{
+  id: 50,
+  subject: 'physics',
+  topic: 'motion',
+  question: "An object is thrown vertically upward with a velocity of 20 m/s. Find the maximum height reached. (g = 10 m/s²)",
+  options: ["15 m", "20 m", "25 m", "30 m"],
+  correct: 2,
+  solutionSteps: [
+    "1. v² = u² - 2gh → 0 = 20² - 2×10×h.",
+    "2. h = 400 / 20 = 20 m."
+  ]
+}
+
 
 ];
+
