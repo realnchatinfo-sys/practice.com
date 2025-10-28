@@ -1,98 +1,267 @@
-<!DOCTYPE html>
+<!--
+index.html
+Purpose: Entry point and UI layout for the WAEC/JAMB-style Mathematics & Physics Quiz App.
+Features:
+- Minimal accessible academic-style layout (pure HTML + CSS).
+- Buttons: Start Test, Submit, Retake.
+- Live progress display, question area, options, and results area.
+- Loads MathJax for LaTeX rendering.
+- Loads data.js and script.js as ES modules.
+-->
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎓 Math & Physics Practice App</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WAEC / JAMB Quiz — Mathematics & Physics</title>
+  <style>
+    /* Minimal academic-style responsive CSS (no frameworks) */
+    :root{
+      --bg:#f7f8fb;
+      --card:#ffffff;
+      --accent:#0b5fff;
+      --muted:#6b7280;
+      --success:#16a34a;
+      --danger:#dc2626;
+      --max-width:900px;
+      --radius:12px;
+      --gap:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background:linear-gradient(180deg,#eef2ff 0%,var(--bg) 100%);
+      color:#0f172a;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:32px 16px;
+      min-height:100vh;
+    }
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:0 8px 30px rgba(2,6,23,0.08);
+      padding:24px;
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:var(--gap);
+    }
+    @media (max-width:980px){
+      .container{grid-template-columns:1fr; padding:18px}
+    }
+    header{
+      grid-column:1/-1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:6px;
+    }
+    header h1{font-size:1.15rem; margin:0}
+    header p{margin:0; color:var(--muted); font-size:0.95rem}
+    .main{
+      background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);
+      border-radius:10px;
+      padding:18px;
+      min-height:360px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .panel{
+      background:transparent;
+      padding:12px;
+      border-radius:8px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .controls{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    button{
+      background:var(--accent);
+      color:white;
+      border:0;
+      padding:10px 14px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+      box-shadow:0 6px 18px rgba(11,95,255,0.12);
+    }
+    button.secondary{
+      background:transparent;
+      color:var(--accent);
+      border:1px solid rgba(11,95,255,0.12);
+      box-shadow:none;
+      font-weight:600;
+    }
+    button:disabled{opacity:0.5; cursor:not-allowed}
+    .meta{display:flex; align-items:center; gap:8px; color:var(--muted); font-size:0.95rem}
+    .question{
+      font-size:1.02rem;
+      padding:10px 6px;
+      line-height:1.5;
+    }
+    .options{display:flex; flex-direction:column; gap:8px}
+    .option{
+      border-radius:8px;
+      padding:10px;
+      border:1px solid rgba(2,6,23,0.06);
+      display:flex;
+      gap:10px;
+      align-items:center;
+      cursor:pointer;
+    }
+    .option input{margin:0 6px 0 0}
+    .progress{
+      height:10px;
+      background:rgba(2,6,23,0.06);
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .progress > i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent),#7c3aed)}
+    aside{
+      background:linear-gradient(180deg,#ffffff 0%,#fbfbff 100%);
+      padding:14px;
+      border-radius:10px;
+      border:1px solid rgba(2,6,23,0.03);
+      min-height:360px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:stretch;
+    }
+    .summary{display:flex; flex-direction:column; gap:8px}
+    .summary .stat{display:flex; justify-content:space-between; color:var(--muted)}
+    .result-card{padding:12px; border-radius:8px; background:linear-gradient(180deg,#fbfffb,#ffffff); border:1px solid rgba(16,185,129,0.06)}
+    .correct {color:var(--success); font-weight:700}
+    .incorrect {color:var(--danger); font-weight:700}
+    .answers-list{max-height:200px; overflow:auto; border-radius:8px; padding:8px; border:1px dashed rgba(2,6,23,0.04)}
+    footer{grid-column:1/-1; margin-top:8px; color:var(--muted); font-size:0.85rem; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap}
+    small.note{color:var(--muted)}
+    /* accessibility focus */
+    .option:focus-within{outline:3px solid rgba(11,95,255,0.12)}
+  </style>
+
+  <!-- MathJax for LaTeX rendering -->
   <script>
-    // Only use \( ... \) for inline math — no $ signs.
     window.MathJax = {
-      tex: { inlineMath: [['\\(', '\\)']] },
-      svg: { fontCache: 'global' }
+      tex: {inlineMath: [['\\(','\\)'], ['$', '$']]},
+      svg: {fontCache: 'global'}
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
 </head>
-<body class="bg-gray-50 text-gray-800">
-  <div class="max-w-4xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-lg">
-    <h1 class="text-3xl font-bold text-center mb-6 text-blue-700">
-      🎓 Math & Physics Practice App
-    </h1>
+<body>
+  <div class="container" role="application" aria-label="WAEC JAMB Quiz Application">
+    <header>
+      <div>
+        <h1>WAEC & JAMB — Mathematics & Physics Quiz</h1>
+        <p class="note">100 Questions per subject — Multiple Choice (A–D). Randomized each attempt.</p>
+      </div>
+      <div class="meta" id="topMeta">
+        <div id="subjectBadge">Subject: <strong id="subjectSpan">Mathematics</strong></div>
+        <div id="progressText">Question 0 of 0</div>
+      </div>
+    </header>
 
-    <!-- Setup Area -->
-    <section id="setup" class="space-y-4">
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label class="font-semibold block mb-1">Select Subject:</label>
-          <select id="subjectSelect" class="border p-2 rounded w-full">
-            <option value="all">All Subjects</option>
-            <option value="mathematics">Mathematics</option>
-            <option value="physics">Physics</option>
-          </select>
+    <main class="main" id="main">
+      <section class="panel" id="introPanel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <p><strong>Instructions:</strong> Choose the most appropriate answer (A–D). Click <strong>Start Test</strong> to begin. You may retake the test to reshuffle questions and options.</p>
+            <p class="note">This app keeps question IDs stable for feedback; answers and options are shuffled per session.</p>
+          </div>
+          <div class="controls">
+            <select id="subjectSelect" aria-label="Select subject">
+              <option value="math">Mathematics</option>
+              <option value="physics">Physics</option>
+            </select>
+            <button id="startBtn">Start Test</button>
+            <button id="submitBtn" class="secondary" disabled>Submit</button>
+            <button id="retakeBtn" class="secondary" disabled>Retake</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="questionPanel" aria-live="polite" hidden>
+        <div class="meta" style="justify-content:space-between">
+          <div id="qid" style="font-weight:600">ID: —</div>
+          <div id="timer" class="note"> </div>
         </div>
 
-        <div>
-          <label class="font-semibold block mb-1">Select Topic:</label>
-          <select id="topicFilter" class="border p-2 rounded w-full">
-            <option value="all">All Topics</option>
-          </select>
+        <div class="question" id="questionHtml">Question text</div>
+
+        <div class="options" id="optionsList" role="list"></div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="controls">
+            <button id="prevBtn" class="secondary">Previous</button>
+            <button id="nextBtn" class="secondary">Next</button>
+          </div>
+          <div style="width:50%; min-width:150px">
+            <div class="progress" aria-hidden="true">
+              <i id="progressBar"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside>
+      <div class="summary">
+        <div class="stat"><span>Progress</span><span id="progressFraction">0 / 0</span></div>
+        <div class="stat"><span>Answered</span><span id="answeredCount">0</span></div>
+        <div class="stat"><span>Unanswered</span><span id="unansweredCount">0</span></div>
+      </div>
+
+      <div class="result-card" id="scoreCard" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div id="scoreText" style="font-size:1.1rem;font-weight:700">Score: —</div>
+            <div id="percentText" class="note">—</div>
+          </div>
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="font-semibold">Number of Questions:</label>
-          <input id="numQuestions" type="number" value="5" min="1" class="border p-2 rounded w-full">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <strong>Answers & Feedback</strong>
+          <button id="showAnswersBtn" class="secondary" disabled>Show</button>
         </div>
-        <div>
-          <label class="font-semibold">Quiz Duration (sec):</label>
-          <input id="quizDuration" type="number" value="300" min="30" class="border p-2 rounded w-full">
-        </div>
+        <div class="answers-list" id="answersList" aria-live="polite"></div>
       </div>
 
-      <button id="startBtn"
-        class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition">
-        ▶ Start Quiz
-      </button>
-    </section>
-
-    <!-- Quiz Area -->
-    <section id="quizArea" class="hidden mt-8 space-y-4">
-      <div class="flex justify-between items-center bg-blue-50 p-3 rounded-lg">
-        <div>Question <span id="curIndex">1</span>/<span id="totalQuestions">--</span></div>
-        <div>⏱ Time Left: <span id="timeLeft">--:--</span></div>
+      <div style="margin-top:auto">
+        <small class="note">Built to mimic WAEC/JAMB-style MCQ structure. Questions are randomized per attempt; IDs stable for feedback.</small>
       </div>
+    </aside>
 
-      <div id="questionText" class="text-lg font-medium p-3 leading-relaxed"></div>
-      <div id="options" class="space-y-3"></div>
-
-      <div class="flex justify-between mt-4">
-        <button id="prevBtn" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">⬅ Prev</button>
-        <button id="nextBtn" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">Next ➡</button>
-      </div>
-
-      <div class="text-sm text-gray-600 mt-2">Elapsed on this question: <span id="qElapsed">0s</span></div>
-
-      <button id="submitBtn" class="w-full mt-4 bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700">
-        ✅ Submit Quiz
-      </button>
-    </section>
-
-    <!-- Results Area -->
-    <section id="resultArea" class="hidden mt-8 space-y-4">
-      <h2 class="text-2xl font-bold text-green-700">📊 Results</h2>
-      <div id="summaryBox" class="bg-green-50 p-4 rounded-lg leading-relaxed"></div>
-      <div id="details" class="space-y-3"></div>
-
-      <div class="flex gap-3">
-        <button id="downloadCsv" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">⬇ Download CSV</button>
-        <button id="restartBtn" class="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600">🔁 Restart</button>
-      </div>
-    </section>
+    <footer>
+      <div>Made for educational practice — © EdTech Quiz</div>
+      <div><small class="note">Local time: <span id="nowTime"></span></small></div>
+    </footer>
   </div>
 
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+  <!-- Load question data and app logic as ES module -->
+  <script type="module">
+    import { QUESTIONS } from './data.js';
+    import { QuizApp } from './script.js';
+
+    // Initialize app
+    const app = new QuizApp({
+      container: document.querySelector('.container'),
+      data: QUESTIONS
+    });
+
+    // display local time
+    const nowTime = document.getElementById('nowTime');
+    function updateTime(){ nowTime.textContent = new Date().toLocaleString(); }
+    updateTime();
+    setInterval(updateTime, 60_000);
+  </script>
 </body>
 </html>
