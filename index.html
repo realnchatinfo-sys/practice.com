@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,6 @@
   <title>🎓 Math & Physics Practice App</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Only use \( ... \) for inline math — no $ signs.
     window.MathJax = {
       tex: { inlineMath: [['\\(', '\\)']] },
       svg: { fontCache: 'global' }
@@ -17,9 +15,29 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
   <div class="max-w-4xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-lg">
-    <h1 class="text-3xl font-bold text-center mb-6 text-blue-700">
+    <h1 class="text-3xl font-bold text-center mb-4 text-blue-700">
       🎓 Math & Physics Practice App
     </h1>
+
+    <!-- 🌟 Dedication Section -->
+    <div id="dedication" class="text-center mb-8 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-100 shadow-sm animate-fadeIn">
+      <h3 class="text-lg font-semibold text-gray-700">🌟 Dedicated To 🌟</h3>
+      <h2 id="studentName" class="text-2xl font-bold text-blue-700 mt-1"></h2>
+      <p id="motivationQuote" class="italic text-gray-600 mt-1"></p>
+    </div>
+
+    <script>
+      // 🧠 Dedication Configuration
+      const dedication = {
+        studentName: "Micheal Garry", // 🔹 Change name here
+        quote: "Keep learning, keep shining — your brilliance will light the world." // 🔹 Change quote here
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("studentName").textContent = dedication.studentName;
+        document.getElementById("motivationQuote").textContent = `"${dedication.quote}"`;
+      });
+    </script>
 
     <!-- Setup Area -->
     <section id="setup" class="space-y-4">
@@ -95,5 +113,13 @@
 
   <script src="data.js"></script>
   <script src="script.js"></script>
+
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn 1.5s ease-in-out; }
+  </style>
 </body>
 </html>
